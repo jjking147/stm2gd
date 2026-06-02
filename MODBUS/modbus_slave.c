@@ -6,9 +6,6 @@
 #include "string.h"
 #include "delay.h"
 
-/* 使用标准 Modbus CRC 字节序: LO first, HI second */
-#define CRC_ORDER 1
-
 // modbus数组高位
 static const unsigned char aucCRCHi[] = {
 	0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41,

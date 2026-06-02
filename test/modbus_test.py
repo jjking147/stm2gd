@@ -24,14 +24,14 @@ def build_read_cmd(slave_id, func, start_addr, count):
     """构建读寄存器命令"""
     cmd = struct.pack('>BBHH', slave_id, func, start_addr, count)
     crc = crc16(cmd)
-    cmd += struct.pack('<H', crc)
+    cmd += struct.pack('>H', crc)  # HI-LO 字节序 (与固件 CRC_ORDER=0 一致)
     return cmd
 
 def build_write_cmd(slave_id, addr, value):
     """构建写单个寄存器命令 (功能码0x06)"""
     cmd = struct.pack('>BBHH', slave_id, 0x06, addr, value)
     crc = crc16(cmd)
-    cmd += struct.pack('<H', crc)
+    cmd += struct.pack('>H', crc)  # HI-LO 字节序
     return cmd
 
 def send_and_receive(ser, cmd, desc, timeout=0.5):
@@ -46,7 +46,7 @@ def send_and_receive(ser, cmd, desc, timeout=0.5):
         # 验证CRC
         if len(resp) >= 4:
             data_part = resp[:-2]
-            recv_crc = struct.unpack('<H', resp[-2:])[0]
+            recv_crc = struct.unpack('>H', resp[-2:])[0]  # HI-LO 字节序
             calc_crc = crc16(data_part)
             if recv_crc == calc_crc:
                 print(f"    CRC校验: 通过")
