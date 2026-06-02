@@ -41,7 +41,8 @@ typedef enum {Bit_RESET = 0, Bit_SET = 1} BitAction;
 #define USART_ClearITPendingBit(usart, it) usart_interrupt_flag_clear(usart, it)
 
 /* STM32 USART标志位兼容定义 */
-#define USART_FLAG_TC    USART_FLAG_TBE
+/* USART_FLAG_TC (Transmission Complete) 和 USART_FLAG_TBE (Transmit Buffer Empty) 是不同的标志位,
+   GD32 原生定义了 USART_FLAG_TC, 不能映射到 TBE, 否则 modbus_master 逐字节发送会出错 */
 #define USART_FLAG_TXE   USART_FLAG_TBE
 #define USART_FLAG_RXNE  USART_FLAG_RBNE
 #define USART_IT_RXNE    USART_INT_RBNE

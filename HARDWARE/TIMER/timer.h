@@ -18,7 +18,7 @@
 #define DELAY_TIM TIMER4
 
 #define DISPATCHER_TIM TIMER9
-#define DISPATCHER_TIM_IRQn TIMER0_UP_TIMER9_IRQn
+#define DISPATCHER_TIM_IRQn TIMER0_UP_TIMER9_IRQn  /* IRQ 25, handler is TIMER0_UP_TIMER10_IRQHandler in startup file */
 
 #define MODBUS_SLAVE_TIM_CLK_EN rcu_periph_clock_enable(RCU_TIMER5)
 #define MODBUS_MASTER_TIM_CLK_EN rcu_periph_clock_enable(RCU_TIMER6)

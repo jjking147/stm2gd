@@ -1,0 +1,32 @@
+# Keil MDK 编译产物
+OBJ/
+Listings/
+
+# Keil IDE 临时文件
+*.uvguix.*
+*.uvoptx
+*.build_log.htm
+*.dep
+*.lnp
+*.sct
+*.htm
+*.map
+*.axf
+*.hex
+*.crf
+*.d
+*.o
+*.lst
+
+# VS Code
+.vscode/
+
+# clangd
+.cache/
+compile_commands.json
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

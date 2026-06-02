@@ -130,6 +130,9 @@ void USART1_Tx_InitDMA(void)
 	dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
 	dma_single_data_mode_init(DMA1, DMA_CH7, &dma_init_struct);
 
+	/* 选择DMA通道的子外设: USART0 TX 对应 DMA_SUBPERI4 */
+	dma_channel_subperipheral_select(DMA1, DMA_CH7, DMA_SUBPERI4);
+
 	/* 使能USART0 DMA发送 */
 	usart_dma_transmit_config(USART0, USART_TRANSMIT_DMA_ENABLE);
 

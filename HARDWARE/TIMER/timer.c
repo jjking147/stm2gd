@@ -26,7 +26,7 @@ void Modbus_Slave_Timer_Init(int ms)
 	timer_disable(MODBUS_SLAVE_TIM);
 }
 
-void TIMER5_DAC_IRQHandler(void)
+void TIMER5_IRQHandler(void)
 {
 	if (timer_interrupt_flag_get(MODBUS_SLAVE_TIM, TIMER_INT_FLAG_UP) != RESET)
 	{
@@ -105,7 +105,7 @@ void Dispatcher_Tim_Init(u16 ms)
 	timer_enable(DISPATCHER_TIM);
 }
 
-void TIMER0_UP_TIMER9_IRQHandler(void)
+void TIMER0_UP_TIMER10_IRQHandler(void)
 {
 	if (timer_interrupt_flag_get(DISPATCHER_TIM, TIMER_INT_FLAG_UP) == SET)
 	{
