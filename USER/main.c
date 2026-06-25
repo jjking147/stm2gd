@@ -2,6 +2,7 @@
 #include "delay.h"
 #include "usart.h"
 #include "bll_main.h"
+#include "bll_motor.h"
 #include "modbus_slave.h"
 #include "timer.h"
 #include "jexception.h"
@@ -20,6 +21,8 @@ int main(void)
 	SystemInit();
 	BLL_Init_All();
 	delay_init(168);
+	delay_ms(500);
+	Debug_ReadMotorMulti();
 
 	while (1)
 	{

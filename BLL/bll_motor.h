@@ -27,6 +27,7 @@ u8 Check_Status(void);
 s32 Get_Encoder_Number(void);
 s32 Get_Turn_Number(void);
 void Check_Fault(void);
+void Debug_ReadMotorMulti(void);
 void SWTICH5_INT_HANDLER(void);
 #endif
 

@@ -42,8 +42,8 @@ void Modbus_Master_Receive(u8 data) // Modbus主机接受信号函数，接受�
 		if (Master_Rec_Count >= MODBUS_BUFF_LEN)
 		{
 			Master_Rec_Count = 0;
-			TIM_SetCounter(MODBUS_MASTER_TIM, 0); // 定时清理一下TIM的计数值，防止中断停止接受信号了
 		}
+		TIM_SetCounter(MODBUS_MASTER_TIM, 0); // 每收到一个字节都重置超时计数器
 	}
 }
 
@@ -112,6 +112,50 @@ void Send_Func03_Data(u16 Reg, u16 Num, MODBUS_RESPONSE_CALLBACK fun) // 发送0
 			}
 			Master_State = MODBUS_IDLE;
 			return;
+		}
+
+		// 首字节不是从机地址，直接丢弃（RS485空闲噪声）
+		if (Master_Rec_Count >= 1 && Master_Receive_Buff[0] != MOTOR_ADDRESS)
+		{
+			if (fun != 0)
+			{
+				Master_State = MODBUS_HANDLING;
+				(*fun)(MODBUS_ERR_Addr, 0, 0);
+			}
+			Master_State = MODBUS_IDLE;
+			return;
+		}
+
+		// CRC校验：用byte[2](字节数)算出实际帧长度，只校验有效帧，忽略尾部噪声
+		if (Master_Rec_Count >= 5)
+		{
+			u16 frame_len = 3 + Master_Receive_Buff[2] + 2; // addr+func+bytecount+data+CRC
+			if (frame_len <= Master_Rec_Count && frame_len >= 5)
+			{
+				u16 calc_crc = Calculate_CRC(Master_Receive_Buff, frame_len - 2);
+				u16 recv_crc = Master_Receive_Buff[frame_len - 2] | (Master_Receive_Buff[frame_len - 1] << 8);
+				if (calc_crc != recv_crc)
+				{
+					if (fun != 0)
+					{
+						Master_State = MODBUS_HANDLING;
+						(*fun)(MODBUS_ERR_CRC, 0, 0);
+					}
+					Master_State = MODBUS_IDLE;
+					return;
+				}
+				Master_Rec_Count = frame_len; // 截断到实际帧长度，去掉尾部噪声
+			}
+			else
+			{
+				if (fun != 0)
+				{
+					Master_State = MODBUS_HANDLING;
+					(*fun)(MODBUS_ERR_CRC, 0, 0);
+				}
+				Master_State = MODBUS_IDLE;
+				return;
+			}
 		}
 
 		if (fun != 0)

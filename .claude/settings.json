@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python test/debug_motor_read.py COM10)",
+      "Read(//e/stm2gd/test/LiftV1.6/McuTemplate/BLL/**)",
+      "Bash(\"D:/MDK_CORE/UV4/UV4.exe\" -b \"e:/stm2gd/test/LiftV1.6/MCUTemplate/USER/Template_GD32.uvprojx\" -j0 -t Template -o \"e:/stm2gd/test/LiftV1.6/MCUTemplate/USER/.vscode/uv4_build.log\")"
+    ]
+  }
+}
